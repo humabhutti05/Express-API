@@ -183,31 +183,27 @@ require('dotenv').config()
 
 
 const getAllAuthor = async (req, res) => {
-
-    try {
-        await connect(process.env.MONGO_URI)
-        const Authors = await Authors.find()
-        res.json(
-            {
-                Authors
-            }
-        )
-
-    }
-    catch (error) {
-        res.json(
-            {
-                message: error.message
-            }
-        )
-
-    }
-}
+    const { AuthorName, AuthorImages , AuthorDescription} = req.body;
+    console.log({ AuthorName, AuthorImages , AuthorDescription} )
+   try {
+    await connect(process.env.MONGO_URI)
+    const allAuthors = await Authors.find()
+    res.json({
+        message: "Author Get Successfully",
+        Authors : allAuthors
+    })
+   } catch (error) {
+    res.json({
+        message: error.message
+    })
+   }
+};
 
 const AddAuthors = async (req, res) => {
 
-    const { AuthorName, AuthorImage } = req.body;
-    if(!AuthorName || ! AuthorImage )
+    const {AuthorName, AuthorImage, AuthorDescription} = req.body;
+
+    if( !AuthorName|| !AuthorImage|| !AuthorDescription)
     {
        res.status(403).json({
           message : "Missing Required Field"
@@ -224,7 +220,7 @@ const AddAuthors = async (req, res) => {
              })
          }
          else{
-          await Authors.create({ AuthorName, AuthorImage })
+          await Authors.create({ AuthorName, AuthorImage, AuthorDescription })
           const allAuthors = await Authors.find()
           res.json({
              message: "Author Added Successfully",
@@ -254,7 +250,7 @@ const deleteAuthor = async (req, res) => {
       await Authors.findOneAndDelete({ _id })
       const Author = await Authors.find()
       res.status(200).json({ 
-         message :"Deleted Succesfully"
+         message :"Deleted Successfully"
          ,Author})
     } 
     catch (error) {

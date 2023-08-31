@@ -44,7 +44,12 @@ const AuthorsSchema = new Schema({
     AuthorImage: {
         type: String,
         required: true
-    }
+    },
+    AuthorDescription: {
+        type: String,
+        required: true,
+    },
+
     
 })
 const  Authors = model('Authors', AuthorsSchema)
